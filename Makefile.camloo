@@ -1,0 +1,144 @@
+# version 0.4.6
+# 
+# Usage:
+#
+# ==== for single file project ===============================================
+#
+#		make -f Makefile.camloo myfile
+#
+#	That produces ./myfile from ./myfile.ml
+#
+# 
+# ==== for multi-files project ==============================================
+#
+#		make -f Makefile.camloo build                    \
+#			FILES="foo.mli foo.ml bar.scm gni.c titi.ml" \
+#			TARGET=myfile
+#
+#	That produces ./myfile from foo.mli, foo.ml, bar.scm,gni.c and titi.ml.
+#	The files' order should be consistent with the compilation depency order.
+#
+
+# Uncomment that line if you want to preserve intermediate files
+# .PRECIOUS: %.scm %.lam .afile %.zi %.sci %.o
+
+DEFAULT_LIB_DIR = $(shell bigloo -q -eval "(begin (print *default-lib-dir*) (exit 0))")
+include $(DEFAULT_LIB_DIR)/Makefile.config
+
+CAMLOO_LIBDIR 	= $(LIBDIR)/camloo
+BIGLOO 			= bigloo
+BGLAFILE		= bglafile
+CAMLOO 			= camloo
+
+CFLAGS 			= -O3
+
+BFLAGS 			= -Obench -q -L $(CAMLOO_LIBDIR) -lib-dir $(LIBDIR) -unsafe -safee
+BCFLAGS 		=-copt "$(CFLAGS) -fPIC  -I$(CAMLOO_LIBDIR)"
+
+ifndef STDLIB
+	STDLIB		= $(CAMLOO_LIBDIR)
+endif
+
+ifdef FILES
+	ML_FILES    = $(filter %.ml, $(FILES))
+	MLI_FILES   = $(filter %.mli, $(FILES))
+	ML_AND_MLI  = $(filter %.ml %.mli, $(FILES))
+
+	MODULES     = $(sort $(notdir $(basenane $(ML_AND_MLI))))
+	ML_DIR      = $(dir $(lastword $(FILES)))
+
+	_SCI_AND_SCM= $(ML_AND_MLI:%.ml=%.scm)
+	SCI_AND_SCM = $(_SCI_AND_SCM:%.mli=%.sci)
+
+	SCM_FILES   = $(patsubst %,%.scm, $(basename $(filter-out %.c, $(FILES))))
+
+	_O_FILES    = $(basename $(FILES))
+	O_FILES     = $(_O_FILES:%=%.o)
+
+	ZI_FILES    = $(patsubst %,%.zi,  $(basename $(ML_AND_MLI))) 
+
+	ifdef ML_FLAGS
+		MLFLAGS = -stdlib $(CAMLOO_LIBDIR) -include $(ML_DIR) $(ML_FLAGS)
+	else
+		MLFLAGS	= -stdlib $(CAMLOO_LIBDIR) -include $(ML_DIR)
+	endif
+	AFILE       = .afile-$(notdir $(TARGET))
+	AFILEFLAG   = -afile $(AFILE)
+else
+	ifdef ML_FLAGS
+		MLFLAGS = -stdlib $(STDLIB) $(ML_FLAGS)
+	else
+		MLFLAGS = -stdlib $(STDLIB)
+	endif
+	ifdef AFILE
+		AFILEFLAG = -afile $(AFILE)
+	else
+		AFILEFLAG =
+	endif
+endif
+
+##################
+# SCI FILES      #
+##################
+
+# mli+ml: mli => sci, ml  => lam
+%.sci: %.mli %.ml
+	$(CAMLOO) -mlopt "$(MLFLAGS)" -stop $(AFILEFLAG) $<
+
+# mli only: mli => {sci, lam}
+%.sci: %.mli
+	$(CAMLOO) -mlopt "$(MLFLAGS)" $(AFILEFLAG) $<
+
+##################
+# ZI FILES       #
+##################
+
+# mli+ml: mli => zi
+%.zi: %.mli %.ml
+	$(CAMLOO) -mlopt "$(MLFLAGS)" -stop -zi $(AFILEFLAG) $<
+
+# ml only: ml => zi
+%.zi: %.ml
+	$(CAMLOO) -mlopt "$(MLFLAGS)" -stop -zi $(AFILEFLAG) $<
+
+# mli only: mli => zi
+%.zi: %.mli
+	$(CAMLOO) -mlopt "$(MLFLAGS)" -stop -zi $(AFILEFLAG) $<
+
+
+###################
+# SCM FILES       #
+###################
+
+# mli+ml: {lam, sci} => scm
+%.scm: %.ml %.sci %.mli
+	$(CAMLOO) -O $(CAMLOO_FLAGS) -mlopt "$(MLFLAGS)" -o $@ $<
+
+# ml only: lam => scm
+%.scm: %.ml
+	$(CAMLOO) -O $(CAMLOO_FLAGS) -mlopt "$(MLFLAGS)" -o $@ $<
+
+# mli only: {lam, sci} => scm
+%.scm: %.sci %.mli
+	$(CAMLOO) -O $(CAMLOO_FLAGS) -mlopt "$(MLFLAGS)" -o $@ $<
+
+
+###################
+# bigloo stuff    #
+###################
+
+$(AFILE): $(SCI_AND_SCM) $(SCM_FILES)
+	$(BGLAFILE) $(SCM_FILES) > $(AFILE)
+
+build: $(AFILE) $(O_FILES)
+	$(BIGLOO) $(BFLAGS) $(AFILEFLAG) $(BCFLAGS) -q -o $(TARGET) $(sort $(O_FILES))
+
+%.clean:
+	rm -f $*.c $*.scm $*.lam $*.o $*.zi $*.zo $*.zix $* $*.out .afile* $*.lam *~ $*.pragma
+
+%.o: %.scm
+	$(BIGLOO) $(BFLAGS) $(AFILEFLAG) $(BCFLAGS) -c -q -o $@ $<
+
+%: %.o
+	$(BIGLOO) $(BFLAGS) $(AFILEFLAG) $(BCFLAGS) -q -o $@ $<
+

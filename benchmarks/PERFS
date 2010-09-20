@@ -1,0 +1,60 @@
+---------------------------
+Wed Sep 15 15:16:27 CEST 2010
+Linux saorge 2.6.32-5-686 #1 SMP Tue Jun 1 04:59:47 UTC 2010 i686 GNU/Linux
+------------------------------------------------------------------------------
+Bigloo (3.4b)                                                            ,--^, 
+`a practical Scheme compiler'                                      _ ___/ /|/  
+Fri Sep 10 18:16:53 CEST 2010                                  ,;'( )__, ) '   
+Inria -- Sophia Antipolis                                     ;;  //   L__.    
+email: bigloo@sophia.inria.fr                                 '   \    /  '    
+url: http://www.inria.fr/mimosa/fp/Bigloo                          ^   ^       
+------------------------------------------------------------------------------
+
+
+setups:
+
+*cc*                   : gcc
+*cc-options*           : 
+*ld-options*           : 
+*ld-post-options*      : 
+*bigloo-lib*           : bigloo
+*bigloo-user-lib*      : (-ldl -lm)
+*default-lib-dir*      : /usr/local/lib/bigloo/3.4b
+*lib-dir*              : (. /usr/local/lib/bigloo/3.4b)
+*include-foreign*      : (bigloo.h)
+*heap-name*            : bigloo.heap
+*target-language*      : native
+*jvm-shell*            : sh
+*dot-shell*            : 
+
+Too see all variables enter the interpreter
+or use the -help2 option.
+
+----
+ (*) read-only variables
+---------------------------
+ffib/ffib
+0.10user 0.00system 0:00.10elapsed 98%CPU (0avgtext+0avgdata 23296maxresident)k
+0inputs+0outputs (0major+1531minor)pagefaults 0swaps
+life/life
+0.06user 0.00system 0:00.07elapsed 102%CPU (0avgtext+0avgdata 23248maxresident)k
+0inputs+0outputs (0major+1527minor)pagefaults 0swaps
+queens/queens
+0.17user 0.00system 0:00.17elapsed 98%CPU (0avgtext+0avgdata 26032maxresident)k
+0inputs+0outputs (0major+1700minor)pagefaults 0swaps
+quicksort/quicksort
+6.99user 0.00system 0:07.01elapsed 99%CPU (0avgtext+0avgdata 177152maxresident)k
+0inputs+0outputs (0major+11147minor)pagefaults 0swaps
+takc/takc
+0.02user 0.00system 0:00.02elapsed 104%CPU (0avgtext+0avgdata 7120maxresident)k
+0inputs+0outputs (0major+520minor)pagefaults 0swaps
+taku/taku
+0.38user 0.00system 0:00.38elapsed 100%CPU (0avgtext+0avgdata 23248maxresident)k
+0inputs+0outputs (0major+1528minor)pagefaults 0swaps
+boyer/boyer
+0.10user 0.05system 0:00.15elapsed 101%CPU (0avgtext+0avgdata 23344maxresident)k
+0inputs+0outputs (0major+1535minor)pagefaults 0swaps
+kb/kb
+0.75user 0.48system 0:01.23elapsed 99%CPU (0avgtext+0avgdata 44880maxresident)k
+0inputs+0outputs (0major+2879minor)pagefaults 0swaps
+---------------------------

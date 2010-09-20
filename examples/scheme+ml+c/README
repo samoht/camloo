@@ -1,0 +1,9 @@
+This directory contains several source files written in Scheme, ML and C.
+These files are compiled separatly (using Bigloo and cc) and linked together
+to produce a unique standalone.
+
+   - ML uses Scheme (the invocation of `nreverse', a physical list reversing).
+   - Scheme uses ML (the list built by ML)
+   - Scheme uses C (`struct el' and `print_el_list').
+   - C uses Scheme (the invocation of `fib').
+

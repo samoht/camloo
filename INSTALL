@@ -1,0 +1,29 @@
+====================================================================
+= Compatibilty step for version of bigloo < 3.4b                   =
+====================================================================
+
+If you run a version of bigloo < 3.4b then you first need to copy
+Makefile.api into the default bigloo library directory, that you can
+obtain using :
+
+	* bigloo -q -eval "(begin (print *default-lib-dir*) (exit 0))"
+
+====================================================================
+= Default installation                                             =
+====================================================================
+
+To install camloo, untar the archive and do :
+
+   * make
+   * sudo make install
+   * (you may then need to do 'sudo ldconfig')
+
+====================================================================
+= Testing your installation                                        =
+====================================================================
+
+You can the run the test suits by doing :
+
+	* make tests
+
+if you want to check that your installation is correct.

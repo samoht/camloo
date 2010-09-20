@@ -1,0 +1,17 @@
+(directives 
+   (extern
+      (obj format_float (obj obj ) "format_float")
+      (obj float_of_string (obj ) "float_of_string")
+      (obj atan2_float (obj obj ) "atan2_float")
+      (obj atan_float (obj ) "atan_float")
+      (obj acos_float (obj ) "acos_float")
+      (obj asin_float (obj ) "asin_float")
+      (obj tan_float (obj ) "tan_float")
+      (obj cos_float (obj ) "cos_float")
+      (obj sin_float (obj ) "sin_float")
+      (obj power_float (obj obj ) "power_float")
+      (obj sqrt_float (obj ) "sqrt_float")
+      (obj log_float (obj ) "log_float")
+      (obj exp_float (obj ) "exp_float")
+   )
+)

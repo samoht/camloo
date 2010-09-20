@@ -1,0 +1,15 @@
+;*---------------------------------------------------------------------*/
+;*    The library                                                      */
+;*---------------------------------------------------------------------*/
+(declare-library! 'camloo
+				  :srfi 'camloo
+				  :basename "bigloocamloo"
+				  :module-eval 'camloo)
+
+;*---------------------------------------------------------------------*/
+;*    Compile and Link options                                         */
+;*---------------------------------------------------------------------*/
+(cond-expand
+ (bigloo-compile
+  (set! *additional-bigloo-libraries*
+		(cons* 'bigloocamloo-runtime *additional-bigloo-libraries*))))

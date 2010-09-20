@@ -1,0 +1,36 @@
+0.4.7 [15 Sept 2010]
+* uncurrify recursive calls inside recursive functions
+* on -O mode, do not do any bound-check for read/write in tables
+
+0.4.6 [6 Sept 2010]
+* More Makefile clean-ups
+* inline functions from vect, fvect and list (optim)
+* uncurrify total applications of functions (optim++)
+
+0.4.5 [25 August 2010]
+* Makefile clean-ups
+
+0.4.4 [28 June 2010]
+* Use the new API's Makefile of bigloo-3.3b-beta
+* Generate a single binary named camloo -- option to the ML compiler can be passed using the -mlopt option -- This change also simplifies a little bit Makefile.camloo
+* Better support for OSX
+* Compilation should now work for 'defensive' GLIBC which are trying to prevent buffer overflow (as does Ubuntu) -- This was a bug in a part of bigloo that only camloo was using
+
+0.4.3 [17 June 2010]
+* Streams are now working properly
+* string functions are working properly
+* tag_of is working properly
+
+0.4.2 [2 June 2010]
+* Fix printf "%b" bug
+* Fix generation of sci bug introduced in last release
+
+0.4.1 [1 June 2010]
+* improve Makefile.camloo to handle compilation of interleaved mli and ml
+* improve the bootstrap process
+* clean-up the 'try ... with' translation: use with-handler instead of custom setjmp hacks
+* start cleaning-up the construction of variants by removing the old C code and replace it by bigloo code.
+* very limited and experimental support for HOP (see examples/hop)
+
+0.4.0 [20 may 2010]
+* port of camloo-0.3 from bigloo 1.6 to bigloo 3.3b

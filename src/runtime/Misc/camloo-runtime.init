@@ -1,0 +1,16 @@
+;*---------------------------------------------------------------------*/
+;*    The library                                                      */
+;*---------------------------------------------------------------------*/
+(declare-library! 'camloo-runtime
+				  :srfi 'camloo-runtime
+				  :basename "bigloocamloo-runtime"
+				  :module-eval 'camloo-runtime)
+
+;*---------------------------------------------------------------------*/
+;*    Compile and Link options                                         */
+;*---------------------------------------------------------------------*/
+(cond-expand
+ (bigloo-compile
+  ;; camloo includes
+  (set! *additional-include-foreign*
+		(cons "caml-bigloo.h" *additional-include-foreign*))))

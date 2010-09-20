@@ -1,0 +1,20 @@
+Contact: thomas.gazagnaire@inria.fr
+
+This directory contains a port of the Caml-Light toolchain to bigloo.
+
+* src/runtime is compiled to the camloo-runtime library; the
+  Caml-Light's runtime and its standard library have been translated
+  into bigloo code -- there are still some C bits so camloo uses only
+  the C backend of bigloo (at the moment - there are some plans to
+  port the remaining bits of C code to bigloo, any help to complete
+  this task appreciated)
+
+* src/camloo is compiled into the camloo binary; it contains two parts
+	(i) an extension of the caml-light compiler version 0.6 (and its
+	translation to bigloo); and (ii) some bigloo code which takes as
+	input the lambda-terms representing the compiled ML program which
+	has been produced by the caml-light compiler.
+
+* Makefile.camloo is an helpfull Makefile to produce binary from a
+	bunch of ml, mli, scm and C files.  Check examples of utilization
+	in examples/ or benchmarks/.
