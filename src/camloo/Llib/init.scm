@@ -56,7 +56,7 @@
 (define *afile*         #f)
 (define *module-alist* '())
 (define *optim*         0)
-(define *version*       "0.4.7")
+(define *version*       "0.4.8")
 (define *bootstrap*     #f)
 (define *hop-mode*      #f)
 (define *mlopt*         "")

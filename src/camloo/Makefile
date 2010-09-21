@@ -10,17 +10,18 @@ CAMLOO_LIBDIR	= $(LIBDIR)/camloo
 #*    Compilers, Tools and Destinations                                */
 #*---------------------------------------------------------------------*/
 # the library name
-API				= camloo
-EXEC        	= camloo
+API							= camloo
+EXEC        		= camloo
 # Directories
-LIB				= ../../lib
-BIN				= ../../bin
+LIB							= ../../lib
+BOOTLIBDIR 			= $(LIB)
+BIN							= ../../bin
 BIGLOO_SRC_DIR  = Llib
 BIGLOO_BSRC_DIR = Llib.bootstrap
-CAML_SRC_DIR	= Mlib
+CAML_SRC_DIR		= Mlib
 MISC_SRC_DIR    = Misc
 RUNTIME_SRC_DIR	= ../runtime
-C_SRC_DIR		=  $(RUNTIME_SRC_DIR)/Clib
+C_SRC_DIR				=  $(RUNTIME_SRC_DIR)/Clib
 # The Bigloo compiler
 BIGLOO			= $(BGLBUILDBIGLOO)
 AFILE			= $(BGLBUILDBINDIR)/$(AFILE_EXE)
@@ -86,7 +87,9 @@ _BGL_SOURCES	= $(_CAMLOO_OBJECTS:%=$(BIGLOO_SRC_DIR)/%.scm) \
 #*---------------------------------------------------------------------*/
 .PHONY: all bootstrap zi exec c
 
-all: c exec zi
+all:
+	mkdir -p $(BOOTBINDIR) &&
+	$(MAKE) c exec zi
 
 zi: $(ZI_OBJECTS)
 
@@ -197,6 +200,7 @@ distclean: cleanall
 #  Additional rules                                                    */
 #*---------------------------------------------------------------------*/
 $(EXEC): $(OBJECTS)
+	mkdir -p $(BIN)
 	$(BIGLOO) $(EFLAGS) $(BAPIFLAGS) -copt $(CPICFLAGS) -copt "$(CEFLAGS)" $^ -o $(BIN)/$@
 
 $(LIB)/%.zi: $(RUNTIME_SRC_DIR)/Mlib/%.mli

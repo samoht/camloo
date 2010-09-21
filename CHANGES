@@ -1,3 +1,7 @@
+0.4.8 [21 Sept 2010]
+* Add a configure script (which just detect if the correct version of bigloo is installed)
+* override BOOTLIBDIR to install the .init and other lib files locally (instead of in the bigloo src dir which may be not present)
+
 0.4.7 [15 Sept 2010]
 * uncurrify recursive calls inside recursive functions
 * on -O mode, do not do any bound-check for read/write in tables

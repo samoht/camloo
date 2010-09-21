@@ -10,13 +10,14 @@ CAMLOO_LIBDIR	= $(LIBDIR)/camloo
 #*    Compilers, Tools and Destinations                                */
 #*---------------------------------------------------------------------*/
 # the library name
-API				= camloo-runtime
+API							= camloo-runtime
 # Directories
-LIB				= $(BOOTLIBDIR)
+LIB							= ../../lib
+BOOTLIBDIR			= $(LIB)
 BIGLOO_SRC_DIR  = Llib
 BIGLOO_BSRC_DIR = Llib.bootstrap
-C_SRC_DIR		= Clib
-CAML_SRC_DIR	= Mlib
+C_SRC_DIR				= Clib
+CAML_SRC_DIR		= Mlib
 MISC_SRC_DIR    = Misc
 # The Bigloo compiler
 BIGLOO			= $(BGLBUILDBIGLOO)
@@ -64,7 +65,9 @@ _BGL_SOURCES	= $(_BGL_OBJECTS:%=$(BIGLOO_SRC_DIR)/%.scm) \
 #*---------------------------------------------------------------------*/
 .PHONY: all bootstrap c
 
-all: c
+all:
+	mkdir -p $(BOOTLIBDIR)
+	$(MAKE) c
 
 bootstrap:
 	$(MAKE) && \
@@ -92,6 +95,7 @@ c:
 		fi; \
 		ln -f -s ../$(BIGLOO_BSRC_DIR)/$$file.scm $(BIGLOO_SRC_DIR); \
 	done
+	mkdir -p $(BOOTLIBDIR)
 	$(MAKE) api-c
 
 $(MISC_SRC_DIR)/$(API).init: $(MISC_SRC_DIR)/$(API).init.in .afile

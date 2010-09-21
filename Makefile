@@ -6,6 +6,7 @@
 
 DEFAULT_LIB_DIR = $(shell bigloo -q -eval "(begin (print *default-lib-dir*) (exit 0))")
 include $(DEFAULT_LIB_DIR)/Makefile.config
+BOOTLIBDIR=`pwd`/lib
 
 #*---------------------------------------------------------------------*/
 #*    all                                                              */
@@ -17,16 +18,16 @@ boot: build
 build: build-c
 
 c: build-c
-jvm: boot-jvm
-dotnet: boot-dotnet
+jvm: build-jvm
+dotnet: build-dotnet
 
 build-c:
 	if [ "$(NATIVEBACKEND)" = "yes" ]; then \
-		echo "[0m[1;32m>>> C[0m"; \
-		(cd src/runtime && $(MAKE) c); \
-		(cd src/camloo  && \
-			export LD_LIBRARY_PATH=$(BOOTLIBDIR); \
-			export DYLD_LIBRARY_PATH=$(BOOTLIBDIR); \
+		echo "[0m[1;32m>>> C[0m" && \
+		(	cd src/runtime && $(MAKE) c ) && \
+		export LD_LIBRARY_PATH=$(BOOTLIBDIR) && \
+		export DYLD_LIBRARY_PATH=$(BOOTLIBDIR) && \
+		(	cd src/camloo  && \
 			$(MAKE) c && \
 			$(MAKE) exec && \
 			$(MAKE) zi ); \
