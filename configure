@@ -1,0 +1,78 @@
+#!/bin/sh
+
+camloo=`head -1 CHANGES | cut -d' ' -f1 2>/dev/null`
+echo Configuring camloo version $camloo
+
+### Configuration starts here
+
+# The min & max allowed bigloo versions
+bigloo_min=3.3a
+# Can be set to "" to mean to max limit
+bigloo_max=3.4b
+
+# The bigloo binary, auto will use `which` to find it
+bigloo=auto
+
+# This will be filled using the bigloo binary above
+bglversion=
+bgllibdir=`bigloo -q -eval "(begin (print *default-lib-dir*) (exit 0))"`
+
+
+### End of configuration
+
+# Try to find the bigloo binary
+guess_bigloo_path() {
+    echo -n "Guessing bigloo path... "
+    bgl=`which bigloo 2>/dev/null`
+    echo $bgl
+    if [ -z $bgl ]; then
+	echo "Cannot find bigloo binary. Reconfigure with --bigloo=/path/to/bigloo" >&2
+	return 1
+    fi
+    bigloo=$bgl
+}
+
+# Check if we have a working and sufficient bigloo
+check_bigloo() {
+    echo -n "Checking bigloo version... "
+    version=`$bigloo -q -eval "(begin (print *bigloo-version*) (exit 0))"`
+    echo -n "found $version... "
+    if [ -z $version ]; then
+	echo "Cannot determine bigloo version. Have you a working bigloo?" >&2
+	return 1
+    fi
+
+    # Checks if bigloo version >= $bigloo_min
+    $bigloo -q -eval "(exit (if (string>=? *bigloo-version* \"$bigloo_min\") 0 1))"
+    check=$?
+
+    if [ "x$check" = "x0" ]; then
+	# Checks if bigloo version <= $bigloo_max (if set)
+	if [ $bigloo_max ]; then
+	    $bigloo -q -eval "(exit (if (string<=? *bigloo-version* \"$bigloo_max\") 0 1))"
+	    check=$?
+
+	    if [ "x$check" = "x0" ]; then
+		echo OK
+		bglversion=$version
+	    else
+		echo "Error: bigloo <= $bigloo_max is required for camloo $camloo" >&2
+		return 1
+	    fi
+	fi
+    else
+	echo "Error: bigloo >= $bigloo_min is required for camloo $camloo" >&2
+	return 1
+    fi
+}
+
+# *** Entry point is here:
+if [ "x$bigloo" = "xauto" ]; then
+    guess_bigloo_path || exit 1
+fi
+
+check_bigloo || exit 1
+
+echo bigloo=$bigloo
+echo bglversion=$bglversion
+echo bgllibdir=$bgllibdir
