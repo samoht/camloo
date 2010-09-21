@@ -14,6 +14,7 @@ obtain using :
 
 To install camloo, untar the archive and do :
 
+   * ./configure
    * make
    * sudo make install
    * (you may then need to do 'sudo ldconfig')
