@@ -13,8 +13,8 @@ CAMLOO_LIBDIR	= $(LIBDIR)/camloo
 API             = camloo
 EXEC            = camloo
 # Directories
-LIB             = ../../lib
-BOOTLIBDIR      = $(LIB)
+MY_LIB          = ../../lib
+BOOTLIBDIR      = $(MY_LIB)
 BIN             = ../../bin
 BIGLOO_SRC_DIR  = Llib
 BIGLOO_BSRC_DIR = Llib.bootstrap
@@ -77,7 +77,7 @@ OBJECTS			= $(_OBJECTS:%=objs/%.o)
 
 EOBJECTS		= objs/make_lib.o
 
-ZI_OBJECTS  	= $(_ZI_RUNTIME:%=$(LIB)/%.zi)
+ZI_OBJECTS  	= $(_ZI_RUNTIME:%=$(MY_LIB)/%.zi)
 
 REBUILD_TARGET 	= $(patsubst %.mli, $(CAML_SRC_DIR)/%.zi, \
 				  $(patsubst %.ml,  $(CAML_SRC_DIR)/%.scm, $(CAMLC_SRC)))
@@ -110,19 +110,19 @@ bootstrap:
 		cp $(BIN)/$(EXEC) $(BIN)/$(EXEC).ok && \
 		cp -r $(BIGLOO_BSRC_DIR) $(BIGLOO_BSRC_DIR).ok; \
 	fi && \
-	$(RM) -f $(LIB)/*.zi && \
+	$(RM) -f $(MY_LIB)/*.zi && \
 	(	$(MAKE) zi && \
 		$(RM) -f $(CAML_SRC_DIR)/*.scm && \
 		$(RM) -f $(CAML_SRC_DIR)/*.sci && \
 		$(RM) -f $(CAML_SRC_DIR)/*.lam && \
 		$(RM) -f $(CAML_SRC_DIR)/*.zi && \
 		$(MAKE) -f $(MAKEFILE_CAMLOO) $(REBUILD_TARGET) \
-			STDLIB=$(LIB) ML_FLAGS="-include Mlib" \
+			STDLIB=$(MY_LIB) ML_FLAGS="-include Mlib" \
 			AFILE="afile-bootstrap" && \
 		mkdir -p $(BIGLOO_BSRC_DIR) && \
 		mv $(CAML_SRC_DIR)/*.scm $(BIGLOO_BSRC_DIR) && \
 		$(MAKE) exec && \
-		$(RM) -f $(LIB)/*.zi && \
+		$(RM) -f $(MY_LIB)/*.zi && \
 		$(MAKE) zi ) \
 	|| ($(MAKE) bootstrap-recover && exit)
 
@@ -157,17 +157,17 @@ $(MISC_SRC_DIR)/$(API).init: $(MISC_SRC_DIR)/$(API).init.in
 #*---------------------------------------------------------------------*/
 .PHONY: install uninstall
 
-CP = cp --force --backup
+CP = cp # --force --backup
+MODFILE = -xw+r
 
-install: api-install-init
+install: # api-install-init
 	mkdir -p $(CAMLOO_LIBDIR)
 	$(CP) $(BIN)/camloo $(BINDIR)/camloo && \
 	chmod $(BMASK) $(BINDIR)/camloo && \
-	$(CP) $(LIB)/*.zi $(CAMLOO_LIBDIR)/ && \
-	chmod $(MODFILE) $(CAMLOO_LIBDIR)/*.zi && \
-	$(MAKE) api-install-c
+	$(CP) $(MY_LIB)/*.zi $(CAMLOO_LIBDIR)/ && \
+	chmod $(MODFILE) $(CAMLOO_LIBDIR)/*.zi # && $(MAKE) api-install-c
 
-uninstall: api-uninstall-init api-uninstall-c
+uninstall: # api-uninstall-init api-uninstall-c
 	$(RM) -rf $(CAMLOO_LIBDIR)/
 	$(RM) -f  $(BINDIR)/camloo
 
@@ -182,21 +182,21 @@ bootstrap-clean: clean
 	$(RM) -f $(CAML_SRC_DIR)/*.sci
 	$(RM) -rf $(BIGLOO_BSRC_DIR).ok/
 
-clean: api-clean
+clean: # api-clean
 	for file in $(_CAMLC_OBJECTS); do \
 		$(RM) -f  $(BIGLOO_SRC_DIR)/$$file.sc*; \
 	done
 	$(RM) -f $(RUNTIME_SRC_DIR)/Mlib/*.zi
 	$(RM) -f $(CAML_SRC_DIR)/*.zi
 	$(RM) -f $(CAML_SRC_DIR)/*.lam
-	$(RM) -f $(LIB)/*.zi
+	$(RM) -f $(MY_LIB)/*.zi
 	$(RM) -f $(RUNTIME_SRC_DIR)/Mlib/*.sci
 	$(RM) -f $(RUNTIME_SRC_DIR)/Mlib/*.scm
 	$(RM) -f $(RUNTIME_SRC_DIR)/Mlib/*.lam
 	$(RM) -f $(BIN)/camloo
 	$(RM) -f $(BIN)/camloo.ok
 
-cleanall: api-cleanall bootstrap-clean
+cleanall: bootstrap-clean # api-cleanall 
 
 distclean: cleanall
 
@@ -207,8 +207,8 @@ $(EXEC): $(OBJECTS)
 	mkdir -p $(BIN)
 	$(BIGLOO) $(EFLAGS) $(BAPIFLAGS) -copt $(CPICFLAGS) -copt "$(CEFLAGS)" $^ -o $(BIN)/$@
 
-$(LIB)/%.zi: $(RUNTIME_SRC_DIR)/Mlib/%.mli
-	$(BIN)/$(EXEC) -stop -zi -mlopt "-O none -include $(LIB)" $< -o $@
-	mv -f $(RUNTIME_SRC_DIR)/Mlib/$*.zi $(LIB)
+$(MY_LIB)/%.zi: $(RUNTIME_SRC_DIR)/Mlib/%.mli
+	$(BIN)/$(EXEC) -stop -zi -mlopt "-O none -include $(MY_LIB)" $< -o $@
+	mv -f $(RUNTIME_SRC_DIR)/Mlib/$*.zi $(MY_LIB)
 
 include $(DEFAULT_LIB_DIR)/Makefile.api

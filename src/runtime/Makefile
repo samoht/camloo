@@ -12,8 +12,8 @@ CAMLOO_LIBDIR	= $(LIBDIR)/camloo
 # the library name
 API             = camloo-runtime
 # Directories
-LIB             = ../../lib
-BOOTLIBDIR      = $(LIB)
+MY_LIB          = ../../lib
+BOOTLIBDIR      = $(MY_LIB)
 BIGLOO_SRC_DIR  = Llib
 BIGLOO_BSRC_DIR = Llib.bootstrap
 C_SRC_DIR       = Clib
@@ -26,11 +26,11 @@ JFILE           = $(BGLBUILDBINDIR)/$(JFILE_EXE)
 DEPEND          = $(BGLBUILDBINDIR)/$(BDEPEND_EXE)
 BTAGS           = $(BGLBUILDBINDIR)/$(BTAGS_EXE)
 # Bigloo compilation options
-BAPIFLAGS       = $(BFLAGS) -I $(BIGLOO_SRC_DIR) -lib-dir $(LIB) \
+BAPIFLAGS       = $(BFLAGS) -I $(BIGLOO_SRC_DIR) -lib-dir $(MY_LIB) \
                   -srfi $(API) -rm -unsafe -safee
 CAPIFLAGS       = -I $(DEFAULT_LIB_DIR)
 # Flags to build a heap
-BHEAPFLAGS      = -unsafe -q -mkaddheap -mkaddlib -L $(LIB) -I $(BIGLOO_SRC_DIR) \
+BHEAPFLAGS      = -unsafe -q -mkaddheap -mkaddlib -L $(MY_LIB) -I $(BIGLOO_SRC_DIR) \
                   -heap-library $(API) -srfi $(API)
 
 #*---------------------------------------------------------------------*/
@@ -111,7 +111,8 @@ $(MISC_SRC_DIR)/$(API).init: $(MISC_SRC_DIR)/$(API).init.in .afile
 #*---------------------------------------------------------------------*/
 .PHONY: install uninstall
 
-CP = cp --force #--backup
+CP = cp #--force --backup
+MODFILE = -xw+r
 
 install: api-install-init
 	mkdir -p $(CAMLOO_LIBDIR) && \
