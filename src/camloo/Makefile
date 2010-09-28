@@ -10,30 +10,33 @@ CAMLOO_LIBDIR	= $(LIBDIR)/camloo
 #*    Compilers, Tools and Destinations                                */
 #*---------------------------------------------------------------------*/
 # the library name
-API							= camloo
-EXEC        		= camloo
+API             = camloo
+EXEC            = camloo
 # Directories
-LIB							= ../../lib
-BOOTLIBDIR 			= $(LIB)
-BIN							= ../../bin
+LIB             = ../../lib
+BOOTLIBDIR      = $(LIB)
+BIN             = ../../bin
 BIGLOO_SRC_DIR  = Llib
 BIGLOO_BSRC_DIR = Llib.bootstrap
-CAML_SRC_DIR		= Mlib
+CAML_SRC_DIR    = Mlib
 MISC_SRC_DIR    = Misc
-RUNTIME_SRC_DIR	= ../runtime
-C_SRC_DIR				=  $(RUNTIME_SRC_DIR)/Clib
+RUNTIME_SRC_DIR = ../runtime
+C_SRC_DIR       =  $(RUNTIME_SRC_DIR)/Clib
 # The Bigloo compiler
-BIGLOO			= $(BGLBUILDBIGLOO)
-AFILE			= $(BGLBUILDBINDIR)/$(AFILE_EXE)
-JFILE			= $(BGLBUILDBINDIR)/$(JFILE_EXE)
-DEPEND			= $(BGLBUILDBINDIR)/$(BDEPEND_EXE)
-BTAGS			= $(BGLBUILDBINDIR)/$(BTAGS_EXE)
+BIGLOO          = $(BGLBUILDBIGLOO)
+AFILE           = $(BGLBUILDBINDIR)/$(AFILE_EXE)
+JFILE           = $(BGLBUILDBINDIR)/$(JFILE_EXE)
+DEPEND          = $(BGLBUILDBINDIR)/$(BDEPEND_EXE)
+BTAGS           = $(BGLBUILDBINDIR)/$(BTAGS_EXE)
 # Bigloo compilation options
-BAPIFLAGS		= $(BFLAGS) -I $(BIGLOO_SRC_DIR) -lib-dir $(BOOTLIBDIR) \
-				  -srfi $(API) -rm -unsafe -safee #-g3 -cg
+BAPIFLAGS       = $(BFLAGS) -I $(BIGLOO_SRC_DIR) -lib-dir $(BOOTLIBDIR) \
+                  -srfi $(API) -rm -unsafe -safee #-g3 -cg
+CAPIFLAGS       = -I $(DEFAULT_LIB_DIR)
+LDEXTRA         = -L$(DEFAULT_LIB_DIR)
+CEFLAGS         = -I $(DEFAULT_LIB_DIR)
 # Flags to build a heap
-BHEAPFLAGS		= -unsafe -q -mkaddheap -mkaddlib -L $(LIBDIR) -I $(BIGLOO_SRC_DIR) \
-				  -heap-library $(API) -srfi $(API)
+BHEAPFLAGS      = -unsafe -q -mkaddheap -mkaddlib -L $(LIBDIR) -I $(BIGLOO_SRC_DIR) \
+                  -heap-library $(API) -srfi $(API)
 
 #*---------------------------------------------------------------------*/
 #*    Scheme extended objects                                          */
@@ -88,7 +91,7 @@ _BGL_SOURCES	= $(_CAMLOO_OBJECTS:%=$(BIGLOO_SRC_DIR)/%.scm) \
 .PHONY: all bootstrap zi exec c
 
 all:
-	mkdir -p $(BOOTBINDIR) &&
+	mkdir -p $(BOOTBINDIR) && \
 	$(MAKE) c exec zi
 
 zi: $(ZI_OBJECTS)

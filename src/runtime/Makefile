@@ -10,27 +10,28 @@ CAMLOO_LIBDIR	= $(LIBDIR)/camloo
 #*    Compilers, Tools and Destinations                                */
 #*---------------------------------------------------------------------*/
 # the library name
-API							= camloo-runtime
+API             = camloo-runtime
 # Directories
-LIB							= ../../lib
-BOOTLIBDIR			= $(LIB)
+LIB             = ../../lib
+BOOTLIBDIR      = $(LIB)
 BIGLOO_SRC_DIR  = Llib
 BIGLOO_BSRC_DIR = Llib.bootstrap
-C_SRC_DIR				= Clib
-CAML_SRC_DIR		= Mlib
+C_SRC_DIR       = Clib
+CAML_SRC_DIR    = Mlib
 MISC_SRC_DIR    = Misc
 # The Bigloo compiler
-BIGLOO			= $(BGLBUILDBIGLOO)
-AFILE			= $(BGLBUILDBINDIR)/$(AFILE_EXE)
-JFILE			= $(BGLBUILDBINDIR)/$(JFILE_EXE)
-DEPEND			= $(BGLBUILDBINDIR)/$(BDEPEND_EXE)
-BTAGS			= $(BGLBUILDBINDIR)/$(BTAGS_EXE)
+BIGLOO          = $(BGLBUILDBIGLOO)
+AFILE           = $(BGLBUILDBINDIR)/$(AFILE_EXE)
+JFILE           = $(BGLBUILDBINDIR)/$(JFILE_EXE)
+DEPEND          = $(BGLBUILDBINDIR)/$(BDEPEND_EXE)
+BTAGS           = $(BGLBUILDBINDIR)/$(BTAGS_EXE)
 # Bigloo compilation options
-BAPIFLAGS		= $(BFLAGS) -I $(BIGLOO_SRC_DIR) -lib-dir $(LIB) \
-				  -srfi $(API) -rm -unsafe -safee
+BAPIFLAGS       = $(BFLAGS) -I $(BIGLOO_SRC_DIR) -lib-dir $(LIB) \
+                  -srfi $(API) -rm -unsafe -safee
+CAPIFLAGS       = -I $(DEFAULT_LIB_DIR)
 # Flags to build a heap
-BHEAPFLAGS		= -unsafe -q -mkaddheap -mkaddlib -L $(LIB) -I $(BIGLOO_SRC_DIR) \
-				  -heap-library $(API) -srfi $(API)
+BHEAPFLAGS      = -unsafe -q -mkaddheap -mkaddlib -L $(LIB) -I $(BIGLOO_SRC_DIR) \
+                  -heap-library $(API) -srfi $(API)
 
 #*---------------------------------------------------------------------*/
 #*    Scheme extended objects                                          */
