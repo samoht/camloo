@@ -29,7 +29,7 @@ JFILE           = $(BGLBUILDBINDIR)/$(JFILE_EXE)
 DEPEND          = $(BGLBUILDBINDIR)/$(BDEPEND_EXE)
 BTAGS           = $(BGLBUILDBINDIR)/$(BTAGS_EXE)
 # Bigloo compilation options
-BAPIFLAGS       = $(BFLAGS) -I $(BIGLOO_SRC_DIR) -lib-dir $(BOOTLIBDIR) \
+BAPIFLAGS       = $(BFLAGS) -I $(BIGLOO_SRC_DIR) -I $(BOOTLIBDIR) -lib-dir $(BOOTLIBDIR) \
                   -srfi $(API) -rm -unsafe -safee #-g3 -cg
 CAPIFLAGS       = -I $(DEFAULT_LIB_DIR)
 LDEXTRA         = -L$(DEFAULT_LIB_DIR)
@@ -143,7 +143,8 @@ c:
 		fi; \
 		ln -f -s ../$(BIGLOO_BSRC_DIR)/$$file.scm $(BIGLOO_SRC_DIR); \
 	done && \
-	$(MAKE) api-c
+	mkdir -p objs && \
+	$(MAKE) heap-c
 
 $(MISC_SRC_DIR)/$(API).init: $(MISC_SRC_DIR)/$(API).init.in
 	cp $^ $@
