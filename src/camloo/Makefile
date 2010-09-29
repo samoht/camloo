@@ -182,7 +182,7 @@ bootstrap-clean: clean
 	$(RM) -f $(CAML_SRC_DIR)/*.sci
 	$(RM) -rf $(BIGLOO_BSRC_DIR).ok/
 
-clean: # api-clean
+clean: api-clean
 	for file in $(_CAMLC_OBJECTS); do \
 		$(RM) -f  $(BIGLOO_SRC_DIR)/$$file.sc*; \
 	done
@@ -196,7 +196,7 @@ clean: # api-clean
 	$(RM) -f $(BIN)/camloo
 	$(RM) -f $(BIN)/camloo.ok
 
-cleanall: bootstrap-clean # api-cleanall 
+cleanall: bootstrap-clean api-cleanall 
 
 distclean: cleanall
 
